@@ -1,0 +1,12 @@
+{
+  "name": "3layerArchitectureResumeApi",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/jiyong89/3LayerArchitectureResumeApi.git",
+  "author": "jiyongSong <jiyongsong89@gmail.com>",
+  "license": "MIT",
+  "type":"module",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
