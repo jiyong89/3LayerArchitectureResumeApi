@@ -8,7 +8,7 @@ export class UserController {
 // 회원가입 컨트롤러
 signUp = async (req, res, next) => {
   try {
-    const { email, password, passwordConfirm, userName } = req.body;
+    const { email, password, passwordConfirm, name } = req.body;
     // 유효성 검사하기
     if (!email) {
       return res.status(400).json({ message: '이메일은 필수값입니다.' });
@@ -29,7 +29,7 @@ signUp = async (req, res, next) => {
       return res.status(400).json({ message: '비밀번호와 비밀번호 확인값이 일치하지 않습니다.' });
     }
     // 유저 생성
-    const createUser = await this.userService.createUser(email, password, userName);
+    const createUser = await this.userService.createUser(email, password, name);
 
     return res.status(201).json({ data: createUser });
   } catch (err) {
@@ -38,23 +38,34 @@ signUp = async (req, res, next) => {
 };
 
 // 로그인 컨트롤러
-signIN = async (req,res,next) => {
-    try{
-        const {email, password} = req.body;
+signIN = async (req, res, next) => {
+  try {
+    const { email, password } = req.body;
 
-        if(!email){
-            return res.status(400).json({message: "이메일은 필수값 입니다."})
-        }
-        if(!password){
-            return res.status(400).json({message:"비밀번호는 필수값 입니다."})
-        }
-        
-        const logInUser = await this.userService.logInUser(email,password);
-        res.cookie("accessToken", logInUser.accessToken);
-        res.cookie("refreshToken", logInUser.refreshToken);
-        return res.status(201).json({data:logInUser});
-    }catch(err){
-        next(err);
+    if (!email) {
+      return res.status(400).json({ message: '이메일은 필수값 입니다.' });
     }
+    if (!password) {
+      return res.status(400).json({ message: '비밀번호는 필수값 입니다.' });
+    }
+
+    const logInUser = await this.userService.logInUser(email, password);
+    res.cookie('accessToken', logInUser.accessToken);
+    res.cookie('refreshToken', logInUser.refreshToken);
+    return res.status(201).json({ data: logInUser });
+  } catch (err) {
+    next(err);
+  }
 };
 
+// 내정보 조회 컨트롤러
+myInfo = async (req, res, next) => {
+  try {
+    const { id } = req.user;
+    const user = await this.userService.getUserById(id);
+
+    return res.status(200).json({ data: user });
+  } catch (err) {
+    next(err);
+  }
+};
